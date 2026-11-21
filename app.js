@@ -20,6 +20,7 @@ function renderBeats(){
  $("#emptyState").classList.toggle("hidden",filtered.length>0);
 }
 function renderCart(){
+ writeStore("rdm_cart",state.cart);
  $("#cartCount").textContent=state.cart.length;$("#drawerCount").textContent="("+state.cart.length+")";
  $("#cartTotal").textContent=money(state.cart.reduce((sum,id)=>sum+beats.find(b=>b.id===id).price,0));
  $("#cartItems").innerHTML=state.cart.length?state.cart.map(id=>{const b=beats.find(x=>x.id===id);return `<div class="cart-line"><div class="cart-line-art">${b.symbol}</div><div class="cart-line-info"><strong>${b.title}</strong><span>${b.producer} · ${b.genre}</span></div><span class="cart-line-price">${money(b.price)}</span><button class="remove-item" data-remove="${id}" aria-label="Remove ${b.title}">×</button></div>`}).join(""):'<p class="cart-empty">Your cart is waiting for a beat.</p>';
