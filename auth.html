@@ -17,6 +17,7 @@
 <button type="button" class="google-button" id="googleSignIn"><span class="google-g">G</span> Continue with Google</button>
 <div class="auth-divider"><span>OR CONTINUE WITH EMAIL</span></div>
 <form id="authForm">
+<div id="nameField" class="auth-field" hidden><label for="authName">Your name</label><input id="authName" type="text" placeholder="Your full name" autocomplete="name" maxlength="80"></div>
 <label for="authEmail">Email address</label><input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
 <label for="authPassword">Password</label><input id="authPassword" type="password" placeholder="At least 8 characters" autocomplete="current-password" minlength="8" required>
 <div class="auth-options"><label class="remember-label"><input type="checkbox" id="showPassword"> Show password</label><button type="button" id="forgotPassword">Forgot password?</button></div>
