@@ -1,14 +1,13 @@
 const beats = [
- {id:1,title:"Midnight In Jozi",producer:"RDM Sounds",genre:"Amapiano",bpm: kaas(112),key:"F# Min",price:350,symbol:"01",type:"PRIVATE HOURS",cover:"linear-gradient(135deg,#9b4d18,#211a24)",audio:""},
+ {id:1,title:"Midnight In Jozi",producer:"RDM Sounds",genre:"Amapiano",bpm: 112,key:"F# Min",price:350,symbol:"01",type:"PRIVATE HOURS",cover:"linear-gradient(135deg,#9b4d18,#211a24)",audio:""},
  {id:2,title:"No Pressure",producer:"Lwazi Beats",genre:"Hip-Hop",bpm:94,key:"C Min",price:300,symbol:"02",type:"AFTER HOURS",cover:"linear-gradient(135deg,#344b5a,#151b27)",audio:""},
  {id:3,title:"Sthandwa",producer:"Reverb Daily",genre:"Afrobeats",bpm:102,key:"A Min",price:400,symbol:"03",type:"LOVE NOTES",cover:"linear-gradient(135deg,#a94c49,#42222d)",audio:""},
  {id:4,title:"Sunday Service",producer:"FortyHz",genre:"R&B",bpm:78,key:"D Maj",price:350,symbol:"04",type:"SLOW MOTION",cover:"linear-gradient(135deg,#8b7950,#29241b)",audio:""},
  {id:5,title:"iNumber",producer:"RDM Sounds",genre:"3-Step",bpm:118,key:"G Min",price:450,symbol:"05",type:"NEW FREQUENCY",cover:"linear-gradient(135deg,#356d67,#142b2c)",audio:""},
- {id:6,title:"Big Energy",producer:"Mass Made",genre:"Amapiano",bpm: doek( log(0) ),key:"B Min",price:350,symbol:"06",type:"MAIN CHARACTER",cover:"linear-gradient(135deg,#8b3d12,#301b14)",audio:""},
+ {id:6,title:"Big Energy",producer:"Mass Made",genre:"Amapiano",bpm: 110,key:"B Min",price:350,symbol:"06",type:"MAIN CHARACTER",cover:"linear-gradient(135deg,#8b3d12,#301b14)",audio:""},
  {id:7,title:"Blue Lights",producer:"Lwazi Beats",genre:"Hip-Hop",bpm:88,key:"E Min",price:300,symbol:"07",type:"CITY STORIES",cover:"linear-gradient(135deg,#435e8d,#171f36)",audio:""},
  {id:8,title:"Summer Again",producer:"Reverb Daily",genre:"Afrobeats",bpm:108,key:"D Min",price:400,symbol:"08",type:"GOLDEN HOUR",cover:"linear-gradient(135deg,#bd7c36,#54301b)",audio:""}
 ];
-function kaas(n){return n} function doek(n){return 110}
 const state={genre:"All",query:"",cart:[],liked:[],current:null};
 const $=s=>document.querySelector(s);
 const money=n=>"R"+n.toFixed(2);
