@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101010">
+<title>Sign in — REVERB BEATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-page">
+<a class="auth-brand" href="index.html"><span class="brand-mark">R</span><span>REVERB<span>BEATS</span></span></a>
+<main class="auth-layout">
+<section class="auth-visual"><p class="eyebrow">YOUR SOUND. YOUR SPACE.</p><h1>Find your<br><span>next sound.</span></h1><p>Sign in to keep your favourite beats, purchases and music journey together.</p><div class="auth-visual-art"><span>R</span><i></i></div><small>REVERB DAILY MEDIA · SOUND IN MOTION</small></section>
+<section class="auth-panel">
+<div class="auth-heading"><p class="eyebrow">WELCOME TO REVERB BEATS</p><h2 id="authTitle">Welcome back.</h2><p id="authSubtitle">Sign in to continue to your account.</p></div>
+<div class="auth-tabs"><button type="button" class="auth-tab active" data-mode="login">Log in</button><button type="button" class="auth-tab" data-mode="signup">Sign up</button></div>
+<button type="button" class="google-button" id="googleSignIn"><span class="google-g">G</span> Continue with Google</button>
+<div class="auth-divider"><span>OR CONTINUE WITH EMAIL</span></div>
+<form id="authForm">
+<label for="authEmail">Email address</label><input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
+<label for="authPassword">Password</label><input id="authPassword" type="password" placeholder="At least 8 characters" autocomplete="current-password" minlength="8" required>
+<div class="auth-options"><label class="remember-label"><input type="checkbox" id="showPassword"> Show password</label><button type="button" id="forgotPassword">Forgot password?</button></div>
+<button class="primary-button auth-submit" id="authSubmit" type="submit">Log in <span>→</span></button>
+</form>
+<p class="auth-message" id="authMessage" role="status"></p>
+<p class="auth-legal">By continuing, you agree to our terms and privacy policy.</p>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="auth.js"></script>
+</body></html>
