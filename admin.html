@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101010"><title>Admin Studio — REVERB BEATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-page">
+<div class="admin-layout">
+<aside class="admin-sidebar">
+<a class="brand" href="index.html"><span class="brand-mark">R</span><span>REVERB<span class="brand-light">BEATS</span></span></a>
+<div class="admin-label">WORKSPACE</div>
+<button class="admin-nav active" data-panel="overview"><span>▦</span> Overview</button>
+<button class="admin-nav" data-panel="beats"><span>♫</span> Beat catalogue</button>
+<button class="admin-nav" data-panel="bids"><span>◇</span> Purchase bids <b class="nav-count" id="bidCount">0</b></button>
+<button class="admin-nav" data-panel="settings"><span>⚙</span> Store settings</button>
+<div class="admin-sidebar-bottom"><span class="status-dot"></span> Admin preview mode<p>This dashboard is currently open for design review.</p><a href="index.html">← View public store</a></div>
+</aside>
+<main class="admin-main">
+<header class="admin-topbar"><div><p class="eyebrow">REVERB DAILY MEDIA / CONTROL ROOM</p><h1 id="pageTitle">Overview</h1></div><div class="admin-top-actions"><span class="preview-pill">PREVIEW · NOT SECURED</span><a href="index.html" class="store-link">View store ↗</a><div class="admin-avatar">R</div></div></header>
+<div class="admin-content">
+<section class="admin-panel" id="panel-overview">
+<div class="admin-welcome"><div><span class="eyebrow">YOUR SOUND. YOUR BUSINESS.</span><h2>Good to have you<br><em>in the studio.</em></h2><p>Manage your catalogue, licensing prices and purchase enquiries from one place.</p></div><div class="welcome-disc"><span>R</span></div></div>
+<div class="stat-grid"><article class="stat-card"><span>LIVE BEATS</span><strong id="statLive">8</strong><small>Available in your store</small></article><article class="stat-card"><span>DRAFTS</span><strong id="statDrafts">0</strong><small>Not visible to customers</small></article><article class="stat-card"><span>PURCHASE BIDS</span><strong id="statBids">0</strong><small>Awaiting your attention</small></article><article class="stat-card"><span>EXCLUSIVELY SOLD</span><strong id="statSold">0</strong><small>Removed from the catalogue</small></article></div>
+<div class="admin-section-head"><div><span class="eyebrow">QUICK ACCESS</span><h3>Make a move</h3></div></div>
+<div class="quick-grid"><button class="quick-card" data-go="beats"><span class="quick-icon">＋</span><strong>Add a new beat</strong><small>Upload and publish a production</small><b>→</b></button><button class="quick-card" data-go="bids"><span class="quick-icon">◇</span><strong>Review purchase bids</strong><small>Consider full-ownership offers</small><b>→</b></button><button class="quick-card" data-go="settings"><span class="quick-icon">₨</span><strong>Set licence prices</strong><small>Update your standard lease rates</small><b>→</b></button></div>
+<div class="admin-notice"><span>i</span><div><strong>Dashboard preview</strong><p>Changes made here are saved only in this browser for demonstration. File uploads, live catalogue updates, bid emails and secure admin access will be connected to Cloudflare R2 and D1 later.</p></div></div>
+</section>
+<section class="admin-panel hidden" id="panel-beats">
+<div class="panel-toolbar"><div><span class="eyebrow">YOUR MUSIC CATALOGUE</span><h2>Manage beats</h2><p class="panel-subtitle">Add productions, update their details and manage availability.</p></div><button class="admin-primary" id="newBeat">＋ Add new beat</button></div>
+<div class="table-wrap"><table class="admin-table"><thead><tr><th>BEAT</th><th>GENRE / BPM</th><th>LEASE PRICES</th><th>STATUS</th><th></th></tr></thead><tbody id="beatRows"></tbody></table></div>
+<div class="empty-admin hidden" id="noBeats">No beats in your catalogue yet.</div>
+</section>
+<section class="admin-panel hidden" id="panel-bids">
+<div class="panel-toolbar"><div><span class="eyebrow">FULL OWNERSHIP ENQUIRIES</span><h2>Purchase bids</h2><p class="panel-subtitle">Review offers from customers interested in buying a beat outright.</p></div></div>
+<div class="admin-notice"><span>i</span><div><strong>Offer workflow preview</strong><p>When D1 and email notifications are connected, customer bids will appear here with their account details. You will be able to approve or decline each offer and contact the customer.</p></div></div>
+<div class="empty-admin"><div class="empty-symbol">◇</div><h3>No purchase bids yet</h3><p>New full-ownership offers will appear here.</p></div>
+</section>
+<section class="admin-panel hidden" id="panel-settings">
+<div class="panel-toolbar"><div><span class="eyebrow">LICENSING & STORE DEFAULTS</span><h2>Store settings</h2><p class="panel-subtitle">Set the standard prices used when creating new beats.</p></div></div>
+<div class="settings-card"><div class="settings-heading"><div><h3>Default licence prices</h3><p>These are preview settings saved in this browser.</p></div><span class="settings-tag">ZAR · SOUTH AFRICAN RAND</span></div>
+<form id="priceSettings" class="price-settings"><label>Beat lease <span>R<input type="number" min="0" step="1" id="defaultLease" value="350"></span></label><label>Non-exclusive lease <span>R<input type="number" min="0" step="1" id="defaultNonExclusive" value="500"></span></label><label>Exclusive lease <span>R<input type="number" min="0" step="1" id="defaultExclusive" value="2500"></span></label><button class="admin-primary" type="submit">Save default prices</button></form></div>
+<div class="settings-card"><div class="settings-heading"><div><h3>Full ownership purchase bids</h3><p>Customers propose their own offer. No fixed purchase price is displayed.</p></div><span class="settings-tag">MAKE AN OFFER</span></div><p class="settings-explainer">A bid will be sent to your admin inbox with the customer's account name, email address, beat details and offer amount. You decide whether to approve or decline it. A beat is only marked as sold after acceptance and confirmed payment.</p></div>
+</section>
+</div>
+</main>
+</div>
+<div class="modal-backdrop hidden" id="beatModal"><section class="beat-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><header><div><span class="eyebrow">CATALOGUE EDITOR</span><h2 id="modalTitle">Add a beat</h2></div><button class="modal-close" id="closeModal" aria-label="Close">×</button></header>
+<form id="beatForm"><input type="hidden" id="beatId"><div class="form-grid"><label class="field full">Beat title<input id="beatTitle" required placeholder="e.g. Midnight in Jozi"></label><label class="field">Producer<input id="beatProducer" required placeholder="Producer name"></label><label class="field">Genre<input id="beatGenre" required placeholder="e.g. Amapiano"></label><label class="field">BPM<input id="beatBpm" type="number" min="1" max="300" placeholder="112"></label><label class="field">Musical key<input id="beatKey" placeholder="F# Minor"></label><label class="field">Beat lease (R)<input id="beatLease" type="number" min="0" step="1" required></label><label class="field">Non-exclusive lease (R)<input id="beatNonExclusive" type="number" min="0" step="1" required></label><label class="field">Exclusive lease (R)<input id="beatExclusive" type="number" min="0" step="1" required></label><label class="field full">Short description<textarea id="beatDescription" rows="3" placeholder="Tell customers about this production..."></textarea></label><label class="field full">Preview audio file <input id="beatAudio" type="file" accept="audio/*"><small>Preview only: file upload will connect to R2 in the next stage.</small></label><label class="field full">Cover artwork <input id="beatArtwork" type="file" accept="image/*"><small>Artwork upload will connect to R2 in the next stage.</small></label></div><div class="modal-actions"><button type="button" class="admin-secondary" id="cancelModal">Cancel</button><button type="submit" class="admin-primary">Save beat</button></div></form></section></div>
+<div class="admin-toast" id="adminToast" role="status"></div>
+<script src="admin.js"></script>
+</body></html>
