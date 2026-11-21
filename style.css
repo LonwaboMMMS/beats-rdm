@@ -8,3 +8,5 @@
 .wishlist-button.saved{color:var(--orange);background:#111e}
 .beat-card{position:relative}
 @media(max-width:720px){.mobile-nav a{min-width:55px}}
+
+.beat-title a{color:inherit;text-decoration:none}.beat-title a:hover{color:var(--orange)}.beat-card{cursor:pointer}.beat-card button{cursor:pointer}
