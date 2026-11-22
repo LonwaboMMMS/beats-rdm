@@ -1,0 +1,40 @@
+{
+  "id": "/",
+  "name": "REVERB BEATS",
+  "short_name": "Reverb Beats",
+  "description": "Discover and license beats from Reverb Daily Media.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#101010",
+  "theme_color": "#101010",
+  "categories": [
+    "music",
+    "shopping"
+  ],
+  "icons": [
+    {
+      "src": "/icons/reverb-beats.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Discover beats",
+      "short_name": "Discover",
+      "url": "/index.html#beatsSection"
+    },
+    {
+      "name": "My Account",
+      "short_name": "Account",
+      "url": "/account.html"
+    }
+  ]
+}
