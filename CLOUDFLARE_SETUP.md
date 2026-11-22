@@ -78,3 +78,14 @@ npx wrangler d1 execute YOUR_DATABASE_NAME --remote --file=migrations/0004_add_a
 When the account with that email signs in, the authentication endpoint grants it the administrator role in D1. The My Account page then displays **Open Admin Dashboard**. The `/admin.html` route is also protected server-side by Pages middleware; hiding the link alone is not the security control. Other accounts receive a forbidden response.
 
 For a brand-new database, `schema.sql` already includes the `is_admin` column. In that case, do not run migration 0004 as well, because the column already exists. For an existing database created before this change, run migration 0004 once.
+
+## 7. Progressive Web App (PWA)
+
+The repository now includes a web app manifest, app icon, service worker, offline fallback page, and install prompt.
+
+- The public storefront shell and core static assets are cached for offline launch.
+- The service worker does not cache account pages, the admin page, or API responses.
+- Sign-in, purchases, downloads, and other server-backed features still require an internet connection.
+- The install prompt appears in supported browsers when the browser considers the site installable.
+
+Cloudflare Pages must serve the site over HTTPS (the `pages.dev` domain already does). After deployment, open the site in Chrome on Android and use the browser's **Install app** or **Add to Home screen** option if the prompt is not shown automatically. On iPhone/iPad, use Safari's Share menu → **Add to Home Screen**.
