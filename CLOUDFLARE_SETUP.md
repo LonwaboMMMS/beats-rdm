@@ -59,3 +59,22 @@ The download endpoint streams the object from the private bucket through the Pag
 ## Important current limitation
 
 This adds the secure delivery and account display layer. It does not yet upload files from the admin dashboard, create paid purchase records from PayFast, or configure Cloudflare bindings. Until those are connected, downloads will return a configuration or entitlement error rather than granting access. Never mark a purchase as paid manually in production; payment status must be verified server-side.
+
+## 6. Configure the administrator account
+
+The admin dashboard uses the same D1 users and sessions database as customer accounts. No second database or separate admin login is needed.
+
+1. In Cloudflare Dashboard, open **Workers & Pages → your Pages project → Settings → Variables and Secrets**.
+2. Add a production variable named `ADMIN_EMAIL` and set its value to the exact email address used by the administrator's Reverb Beats account. Do not put this email in public GitHub code.
+3. Confirm the Pages project has the existing D1 database binding named `DB`.
+4. Apply the administrator-role migration to the same D1 database:
+
+```sh
+npx wrangler d1 execute YOUR_DATABASE_NAME --remote --file=migrations/0004_add_admin_role.sql
+```
+
+5. Redeploy the Pages project after saving the variable.
+
+When the account with that email signs in, the authentication endpoint grants it the administrator role in D1. The My Account page then displays **Open Admin Dashboard**. The `/admin.html` route is also protected server-side by Pages middleware; hiding the link alone is not the security control. Other accounts receive a forbidden response.
+
+For a brand-new database, `schema.sql` already includes the `is_admin` column. In that case, do not run migration 0004 as well, because the column already exists. For an existing database created before this change, run migration 0004 once.
