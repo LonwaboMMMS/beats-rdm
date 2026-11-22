@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-</head>
+<link rel="manifest" href="/manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Reverb Beats"><link rel="icon" href="/icons/reverb-beats.svg" type="image/svg+xml"></head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
@@ -64,5 +64,5 @@
   <div class="overlay hidden" id="cartOverlay"><aside class="cart-drawer"><div class="drawer-heading"><div><p class="eyebrow">YOUR NEXT MOVES</p><h2>Your cart <span id="drawerCount">(0)</span></h2></div><button class="close-button" id="cartClose">×</button></div><div id="cartItems" class="cart-items"><p class="cart-empty">Your cart is waiting for a beat.</p></div><div class="cart-summary"><div><span>Subtotal</span><strong id="cartTotal">R0.00</strong></div><button class="primary-button checkout-button" id="checkoutButton">Continue to checkout <span>→</span></button><small>Secure checkout will be connected when payment processing is configured.</small></div></aside></div>
   <div class="toast" id="toast" role="status"></div>
   <script src="app.js"></script>
-</body>
+<script src="/pwa.js" defer></script></body>
 </html>
