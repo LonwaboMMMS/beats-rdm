@@ -10,7 +10,7 @@ function sessionToken(request) {
   return part ? part.slice(COOKIE.length + 1) : "";
 }
 export async function onRequestGet({ request, env, params }) {
-  if (!env.DB || !env.BEATS_BUCKET) return json({ error: "Download storage is not configured yet." }, 503);
+  if (!env.DB || !env.MEDIA) return json({ error: "Download storage is not configured yet." }, 503);
   const beatId = String(params.beatId || "");
   const format = String(params.format || "").toLowerCase();
   if (!/^[a-zA-Z0-9_-]{1,80}$/.test(beatId) || !["mp3", "wav"].includes(format)) {
@@ -33,7 +33,7 @@ export async function onRequestGet({ request, env, params }) {
   ).bind(beatId, format).first();
   if (!file) return json({ error: format.toUpperCase() + " file is not available for this beat." }, 404);
 
-  const object = await env.BEATS_BUCKET.get(file.object_key);
+  const object = await env.MEDIA.get(file.object_key);
   if (!object) return json({ error: "The purchased file could not be found. Please contact support." }, 404);
   const safeName = beatId.replace(/[^a-zA-Z0-9_-]/g, "_");
   const headers = new Headers();
