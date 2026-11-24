@@ -19,7 +19,8 @@ async function adminUser(request, env) {
 }
 const extFor = (file, kind) => {
   const name = String(file.name || "").toLowerCase();
-  if (kind === "preview" || kind === "mp3") return name.endsWith(".mp3") ? "mp3" : name.endsWith(".wav") ? "wav" : name.endsWith(".ogg") ? "ogg" : "";
+  if (kind === "preview") return name.endsWith(".mp3") ? "mp3" : name.endsWith(".wav") ? "wav" : name.endsWith(".ogg") ? "ogg" : "";
+  if (kind === "mp3") return name.endsWith(".mp3") ? "mp3" : "";
   if (kind === "wav") return name.endsWith(".wav") ? "wav" : "";
   if (kind === "artwork") return name.endsWith(".jpg") || name.endsWith(".jpeg") ? "jpg" : name.endsWith(".png") ? "png" : name.endsWith(".webp") ? "webp" : "";
   return "";
