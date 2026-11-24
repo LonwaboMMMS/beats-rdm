@@ -1,3 +1,8 @@
 name = "reverb-beats"
 compatibility_date = "2026-11-21"
 pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "reverb-beats-db"
+database_id = "86f3d20b-8519-4bb7-a0ee-481287f5b510"
