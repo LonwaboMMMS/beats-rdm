@@ -15,3 +15,11 @@ CREATE TABLE IF NOT EXISTS beats (
   updated_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS beats_status_created_idx ON beats(status, created_at DESC);
+
+-- Ensure the media index exists even if the earlier download migration was not applied.
+CREATE TABLE IF NOT EXISTS beat_files (
+  beat_id TEXT NOT NULL,
+  format TEXT NOT NULL CHECK (format IN ('preview','mp3','wav')),
+  object_key TEXT NOT NULL,
+  PRIMARY KEY (beat_id, format)
+);
