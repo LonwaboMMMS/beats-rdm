@@ -6,3 +6,7 @@ pages_build_output_dir = "."
 binding = "DB"
 database_name = "reverb-beats-db"
 database_id = "86f3d20b-8519-4bb7-a0ee-481287f5b510"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "reverb-beats-media"
