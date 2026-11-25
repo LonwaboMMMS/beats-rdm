@@ -28,7 +28,11 @@ export async function onRequestPost({request,env}){
   const order=await env.DB.prepare("SELECT id,amount_cents,status FROM beat_orders WHERE id=?").bind(data.m_payment_id).first();
   if(!order)return new Response("Unknown order",{status:404});
   if(Math.abs(Number(data.amount_gross)*100-Number(order.amount_cents))>0.5)return new Response("Amount mismatch",{status:400});
-  const clientIp=request.headers.get("CF-Connecting-IP")||"";\n  const dns=await fetch("https://cloudflare-dns.com/dns-query?name=sandbox.payfast.co.za&type=A",{headers:{accept:"application/dns-json"}});\n  const dnsData=dns.ok?await dns.json():{};const allowedIps=(dnsData.Answer||[]).filter(x=>x.type===1).map(x=>x.data);\n  if(!clientIp||!allowedIps.includes(clientIp))return new Response("Untrusted notification source",{status:403});\n  const confirm=await fetch("https://sandbox.payfast.co.za/eng/query/validate",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:signed});
+  const clientIp=request.headers.get("CF-Connecting-IP")||"";
+  const dns=await fetch("https://cloudflare-dns.com/dns-query?name=sandbox.payfast.co.za&type=A",{headers:{accept:"application/dns-json"}});
+  const dnsData=dns.ok?await dns.json():{};const allowedIps=(dnsData.Answer||[]).filter(x=>x.type===1).map(x=>x.data);
+  if(!clientIp||!allowedIps.includes(clientIp))return new Response("Untrusted notification source",{status:403});
+  const confirm=await fetch("https://sandbox.payfast.co.za/eng/query/validate",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:signed});
   const confirmation=(await confirm.text()).trim();if(!confirm.ok||confirmation!=="VALID")return new Response("PayFast validation failed",{status:400});
   if(order.status==="paid")return new Response("OK",{status:200});
   const existing=await env.DB.prepare("SELECT id FROM beat_orders WHERE pf_payment_id=?").bind(String(data.pf_payment_id)).first();
