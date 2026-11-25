@@ -18,8 +18,8 @@ function renderPurchases(){
  empty.style.display=purchases.length?"none":"block";
  grid.innerHTML=purchases.map(item=>{
   const artwork=item.artwork?'<img src="'+escapeHtml(item.artwork)+'" alt="" loading="lazy">':'<span>♫</span>';
-  const id=encodeURIComponent(item.beatId);
-  return '<article class="account-card"><div class="account-card-art">'+artwork+'</div><h3>'+escapeHtml(item.title)+'</h3><p>'+escapeHtml(item.producer)+' · '+escapeHtml(item.licence)+'</p><div class="account-card-bottom"><a class="download-button" href="/api/download/'+id+'/mp3">MP3 ↓</a><a class="download-button" href="/api/download/'+id+'/wav">WAV ↓</a></div></article>';
+  const id=encodeURIComponent(item.beatId);const format=item.format==="wav"?"wav":"mp3";
+  return '<article class="account-card"><div class="account-card-art">'+artwork+'</div><h3>'+escapeHtml(item.title)+'</h3><p>'+escapeHtml(item.producer)+' · '+escapeHtml(item.licence)+'</p><div class="account-card-bottom"><a class="download-button" href="/api/download/'+id+'/'+format+'">'+format.toUpperCase()+' ↓</a></div></article>';
  }).join("");
 }
 function renderLiked(){
