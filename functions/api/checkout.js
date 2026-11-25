@@ -17,7 +17,8 @@ function md5Hex(input){
  a0=(a0+A)|0;b0=(b0+B)|0;c0=(c0+C)|0;d0=(d0+D)|0;
  }
  return [a0,b0,c0,d0].map(n=>[0,8,16,24].map(s=>((n>>>s)&255).toString(16).padStart(2,"0")).join("")).join("");
-}\nconst signature = async (data, passphrase) => {
+}
+const signature = async (data, passphrase) => {
   const pairs=Object.entries(data).filter(([,v])=>v!==""&&v!==null&&v!==undefined).map(([k,v])=>k+"="+enc(String(v).trim()));
   if(passphrase) pairs.push("passphrase="+enc(passphrase.trim()));
   const digest=await crypto.subtle.digest("MD5",new TextEncoder().encode(pairs.join("&")));
