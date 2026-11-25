@@ -18,7 +18,7 @@ export async function onRequestGet({ request, env }) {
   ).bind(await sha256(token), Date.now()).first();
   if (!user) return json({ error: "Please log in." }, 401);
   const result = await env.DB.prepare(
-    "SELECT id, beat_id AS beatId, beat_title AS title, producer, artwork_url AS artwork, licence, purchased_at AS purchasedAt FROM beat_purchases WHERE user_id = ? AND payment_status = 'paid' ORDER BY purchased_at DESC"
+    "SELECT id, beat_id AS beatId, beat_title AS title, producer, artwork_url AS artwork, licence, format, purchased_at AS purchasedAt FROM beat_purchases WHERE user_id = ? AND payment_status = 'paid' ORDER BY purchased_at DESC"
   ).bind(user.user_id).all();
   return json({ purchases: result.results || [] });
 }
