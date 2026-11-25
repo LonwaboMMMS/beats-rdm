@@ -46,7 +46,17 @@ $("#progress").addEventListener("input",e=>{const a=$("#audioPlayer");if(a.durat
 $("#audioPlayer").addEventListener("ended",()=>$("#mainPlay").textContent="▶");
 function clock(s){return Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0")}
 $("#prevTrack").addEventListener("click",()=>{const i=beats.findIndex(b=>b.id===state.current);playBeat(beats[(i-1+beats.length)%beats.length].id);});$("#nextTrack").addEventListener("click",()=>{const i=beats.findIndex(b=>b.id===state.current);playBeat(beats[(i+1)%beats.length].id);});
-$("#checkoutButton").addEventListener("click",()=>toast("Checkout is not connected yet. Next: integrate PayFast."));
+$("#checkoutButton").addEventListener("click",async()=>{
+ if(!state.cart.length){toast("Your cart is empty.");return;}
+ const button=$("#checkoutButton");button.disabled=true;button.textContent="Preparing secure checkout…";
+ try{
+  const response=await fetch("/api/checkout",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:state.cart})});
+  const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not start checkout.");
+  const form=document.createElement("form");form.method="POST";form.action=data.action;
+  for(const [name,value] of Object.entries(data.fields)){const input=document.createElement("input");input.type="hidden";input.name=name;input.value=String(value);form.appendChild(input);}
+  document.body.appendChild(form);form.submit();
+ }catch(error){toast(error.message||"Checkout could not be started.");button.disabled=false;button.innerHTML="Continue to checkout →";}
+});
 document.addEventListener("change",e=>{const select=e.target.closest("[data-cart-format]");if(!select)return;const item=state.cart.find(x=>x.id===select.dataset.cartFormat);const beat=beats.find(x=>x.id===select.dataset.cartFormat);if(item&&beat){item.format=select.value;writeStore("rdm_cart",state.cart);const line=select.closest(".cart-line");const price=line?.querySelector(".cart-line-price");if(price)price.textContent=money(formatPrice(beat,item.format));$("#cartTotal").textContent=money(state.cart.reduce((sum,x)=>{const b=beats.find(y=>y.id===x.id);return sum+(b?formatPrice(b,x.format):0)},0));}});
 document.addEventListener("keydown",e=>{if(e.key==="/"&&document.activeElement.tagName!=="INPUT"){e.preventDefault();$("#searchInput").focus();}if(e.key==="Escape")$("#cartOverlay").classList.add("hidden");});
 (async()=>{try{const response=await fetch("/api/beats",{cache:"no-store"});if(!response.ok)throw new Error();const data=await response.json();beats=Array.isArray(data.beats)?data.beats:[];state.cart=state.cart.filter(item=>beats.some(b=>b.id===item.id));state.liked=state.liked.filter(id=>beats.some(b=>b.id===id));state.wishlist=state.wishlist.filter(id=>beats.some(b=>b.id===id));renderBeats();renderCart();}catch(error){beats=[];renderBeats();renderCart();toast("The beat catalogue could not be loaded. Please refresh.");}})();
