@@ -1,4 +1,4 @@
-const CACHE_VERSION="reverb-beats-v2";const APP_CACHE=CACHE_VERSION+"-app";const ASSET_CACHE=CACHE_VERSION+"-assets";const APP_SHELL=["/index.html","/offline.html","/style.css","/app.js","/manifest.webmanifest","/icons/reverb-beats.svg"];const PRIVATE_PATHS=["/admin.html","/account.html","/auth.html"];
+const CACHE_VERSION="reverb-beats-v3";const APP_CACHE=CACHE_VERSION+"-app";const ASSET_CACHE=CACHE_VERSION+"-assets";const APP_SHELL=["/index.html","/offline.html","/style.css","/app.js","/manifest.webmanifest","/icons/reverb-beats.svg"];const PRIVATE_PATHS=["/admin.html","/account.html","/auth.html"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(APP_CACHE).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>!key.startsWith(CACHE_VERSION)).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 self.addEventListener("message",event=>{if(event.data==="SKIP_WAITING")self.skipWaiting();});
