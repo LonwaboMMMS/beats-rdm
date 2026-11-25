@@ -21,18 +21,19 @@ export async function onRequestPost({request,env}){
  try{
   const raw=await request.text();const form=new URLSearchParams(raw);const data={};for(const [k,v] of form)data[k]=v;
   const supplied=data.signature||"";if(!supplied||!data.m_payment_id||!data.pf_payment_id)return new Response("Invalid notification",{status:400});
-  const signed=Object.entries(data).filter(([k])=>k!=="signature").map(([k,v])=>k+"="+enc(v)).join("&")+"&passphrase="+enc(env.PAYFAST_PASSPHRASE.trim());
-  const expected=md5Hex(signed);if(!safeEqual(supplied,expected))return new Response("Invalid signature",{status:400});
+  const paramString=Object.entries(data).filter(([k])=>k!=="signature").map(([k,v])=>k+"="+enc(v)).join("&");
+  const expected=md5Hex(paramString+"&passphrase="+enc(env.PAYFAST_PASSPHRASE.trim()));if(!safeEqual(supplied,expected))return new Response("Invalid signature",{status:400});
   if(String(data.merchant_id)!==String(env.PAYFAST_MERCHANT_ID))return new Response("Merchant mismatch",{status:400});
   if(data.payment_status!=="COMPLETE")return new Response("Payment not complete",{status:200});
   const order=await env.DB.prepare("SELECT id,amount_cents,status FROM beat_orders WHERE id=?").bind(data.m_payment_id).first();
   if(!order)return new Response("Unknown order",{status:404});
   if(Math.abs(Number(data.amount_gross)*100-Number(order.amount_cents))>0.5)return new Response("Amount mismatch",{status:400});
   const clientIp=request.headers.get("CF-Connecting-IP")||"";
-  const dns=await fetch("https://cloudflare-dns.com/dns-query?name=sandbox.payfast.co.za&type=A",{headers:{accept:"application/dns-json"}});
-  const dnsData=dns.ok?await dns.json():{};const allowedIps=(dnsData.Answer||[]).filter(x=>x.type===1).map(x=>x.data);
-  if(!clientIp||!allowedIps.includes(clientIp))return new Response("Untrusted notification source",{status:403});
-  const confirm=await fetch("https://sandbox.payfast.co.za/eng/query/validate",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:signed});
+  const ipToNumber=ip=>{const parts=ip.split(".");if(parts.length!==4||parts.some(x=>!/^\d{1,3}$/.test(x)||Number(x)>255))return null;return parts.reduce((n,x)=>((n*256)+Number(x))>>>0,0)>>>0;};
+  const ip=ipToNumber(clientIp);const ranges=[["197.97.145.144",28],["41.74.179.192",27],["102.216.36.0",28],["102.216.36.128",28],["144.126.193.139",32]];
+  const trusted=ip!==null&&ranges.some(([base,bits])=>{const n=ipToNumber(base);const mask=bits===0?0:(0xffffffff<<(32-bits))>>>0;return n!==null&&(ip&mask)===(n&mask);});
+  if(!trusted)return new Response("Untrusted notification source",{status:403});
+  const confirm=await fetch("https://sandbox.payfast.co.za/eng/query/validate",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:paramString});
   const confirmation=(await confirm.text()).trim();if(!confirm.ok||confirmation!=="VALID")return new Response("PayFast validation failed",{status:400});
   if(order.status==="paid")return new Response("OK",{status:200});
   const existing=await env.DB.prepare("SELECT id FROM beat_orders WHERE pf_payment_id=?").bind(String(data.pf_payment_id)).first();
