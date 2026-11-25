@@ -19,7 +19,7 @@ function renderPurchases(){
  grid.innerHTML=purchases.map(item=>{
   const artwork=item.artwork?'<img src="'+escapeHtml(item.artwork)+'" alt="" loading="lazy">':'<span>♫</span>';
   const id=encodeURIComponent(item.beatId);const format=item.format==="wav"?"wav":"mp3";
-  const filename=String(item.title||"beat").replace(/[\\/\\\\\\u0000-\\u001f\\u007f<>:"|?*]/g," ").replace(/\\s+/g," ").trim().replace(/[. ]+$/g,"").slice(0,120)||"beat";
+  const filename=String(item.title||"").replace(/[\\/\\\\\x00-\x1f\x7f<>:"|?*]/g," ").replace(/\s+/g," ").trim().replace(/[. ]+$/g,"").slice(0,120)||String(item.beatId||"download");
   return '<article class="account-card"><div class="account-card-art">'+artwork+'</div><h3>'+escapeHtml(item.title)+'</h3><p>'+escapeHtml(item.producer)+' · '+escapeHtml(item.licence)+'</p><div class="account-card-bottom"><a class="download-button" data-download-name="'+escapeHtml(filename+'.'+format)+'" href="/api/download/'+id+'/'+format+'">'+format.toUpperCase()+' ↓</a></div></article>';
  }).join("");
 }
