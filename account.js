@@ -19,7 +19,8 @@ function renderPurchases(){
  grid.innerHTML=purchases.map(item=>{
   const artwork=item.artwork?'<img src="'+escapeHtml(item.artwork)+'" alt="" loading="lazy">':'<span>♫</span>';
   const id=encodeURIComponent(item.beatId);const format=item.format==="wav"?"wav":"mp3";
-  return '<article class="account-card"><div class="account-card-art">'+artwork+'</div><h3>'+escapeHtml(item.title)+'</h3><p>'+escapeHtml(item.producer)+' · '+escapeHtml(item.licence)+'</p><div class="account-card-bottom"><a class="download-button" href="/api/download/'+id+'/'+format+'">'+format.toUpperCase()+' ↓</a></div></article>';
+  const filename=String(item.title||"beat").replace(/[\\/\\\\\\u0000-\\u001f\\u007f<>:"|?*]/g," ").replace(/\\s+/g," ").trim().replace(/[. ]+$/g,"").slice(0,120)||"beat";
+  return '<article class="account-card"><div class="account-card-art">'+artwork+'</div><h3>'+escapeHtml(item.title)+'</h3><p>'+escapeHtml(item.producer)+' · '+escapeHtml(item.licence)+'</p><div class="account-card-bottom"><a class="download-button" data-download-name="'+escapeHtml(filename+'.'+format)+'" href="/api/download/'+id+'/'+format+'">'+format.toUpperCase()+' ↓</a></div></article>';
  }).join("");
 }
 function renderLiked(){
@@ -43,7 +44,34 @@ async function loadPurchases(){
   empty.querySelector("p").textContent="Your paid purchases will appear here. Download access becomes available once your account and purchase records are connected.";
  }
 }
-document.addEventListener("click",event=>{
+document.addEventListener("click",async event=>{
+ const download=event.target.closest("a[data-download-name]");
+ if(download){
+  event.preventDefault();
+  if(download.dataset.downloading==="1")return;
+  download.dataset.downloading="1";
+  const original=download.textContent;
+  download.textContent="Preparing…";
+  try{
+   const response=await fetch(download.href,{credentials:"same-origin",cache:"no-store"});
+   if(!response.ok)throw new Error("Download failed ("+response.status+"). Please sign in again or contact support.");
+   const blob=await response.blob();
+   const objectUrl=URL.createObjectURL(blob);
+   const temporary=document.createElement("a");
+   temporary.href=objectUrl;
+   temporary.download=download.dataset.downloadName||"beat.mp3";
+   document.body.appendChild(temporary);
+   temporary.click();
+   temporary.remove();
+   setTimeout(()=>URL.revokeObjectURL(objectUrl),60000);
+  }catch(error){
+   alert(error.message||"Could not download this beat. Please try again.");
+  }finally{
+   download.textContent=original;
+   delete download.dataset.downloading;
+  }
+  return;
+ }
  const button=event.target.closest("[data-remove]");
  if(!button)return;
  localStorage.setItem("rdm_wishlist",JSON.stringify(read("rdm_wishlist").filter(id=>id!==Number(button.dataset.id))));
