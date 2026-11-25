@@ -35,11 +35,28 @@ export async function onRequestGet({ request, env, params }) {
 
   const object = await env.MEDIA.get(file.object_key);
   if (!object) return json({ error: "The purchased file could not be found. Please contact support." }, 404);
-  const safeName = beatId.replace(/[^a-zA-Z0-9_-]/g, "_");
+  const beat = await env.DB.prepare("SELECT title FROM beats WHERE id = ? LIMIT 1").bind(beatId).first();
+  const rawTitle = String(beat?.title || beatId)
+    .replace(/[\\/\\\\\\u0000-\\u001f\\u007f]/g, " ")
+    .replace(/[<>:"|?*]/g, "")
+    .replace(/\\s+/g, " ")
+    .trim()
+    .replace(/[. ]+$/g, "")
+    .slice(0, 120) || beatId;
+  const unicodeFilename = rawTitle + "." + format;
+  const asciiName = rawTitle.normalize("NFKD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9 _.-]/g, "")
+    .replace(/\\s+/g, " ")
+    .trim()
+    .replace(/[. ]+$/g, "")
+    .slice(0, 120) || beatId.replace(/[^a-zA-Z0-9_-]/g, "_");
+  const encodedFilename = encodeURIComponent(unicodeFilename)
+    .replace(/[!'()*]/g, char => "%" + char.charCodeAt(0).toString(16).toUpperCase());
   const headers = new Headers();
   object.writeHttpMetadata(headers);
   headers.set("Content-Type", format === "mp3" ? "audio/mpeg" : "audio/wav");
-  headers.set("Content-Disposition", 'attachment; filename="' + safeName + "." + format + '"');
+  headers.set("Content-Disposition", 'attachment; filename="' + asciiName + "." + format + '"; filename*=UTF-8\'\'' + encodedFilename);
   headers.set("Cache-Control", "private, no-store");
   headers.set("X-Content-Type-Options", "nosniff");
   return new Response(object.body, { headers });
