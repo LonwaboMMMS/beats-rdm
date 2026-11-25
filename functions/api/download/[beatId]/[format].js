@@ -24,8 +24,8 @@ export async function onRequestGet({ request, env, params }) {
   if (!user) return json({ error: "Your session has expired. Please log in again." }, 401);
 
   const entitlement = await env.DB.prepare(
-    "SELECT id FROM beat_purchases WHERE user_id = ? AND beat_id = ? AND payment_status = 'paid' LIMIT 1"
-  ).bind(user.user_id, beatId).first();
+    "SELECT id FROM beat_purchases WHERE user_id = ? AND beat_id = ? AND format = ? AND payment_status = 'paid' LIMIT 1"
+  ).bind(user.user_id, beatId, format).first();
   if (!entitlement) return json({ error: "This beat is not in your paid purchases." }, 403);
 
   const file = await env.DB.prepare(
